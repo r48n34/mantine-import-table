@@ -2,12 +2,12 @@ import React, { useMemo, useState } from "react";
 
 import XLSX from "xlsx";
 import { z } from "zod"
-import { IconInfoCircle, IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
+import { IconDownload, IconInfoCircle, IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 
 import { Dropzone, DropzoneProps, FileRejection } from '@mantine/dropzone';
-// import '@mantine/dropzone/styles.css';
+import '@mantine/dropzone/styles.css';
 
-import { Box, Table, Divider, Text, Card, Grid, Alert, Group, Tooltip, ScrollArea, rem, Modal } from "@mantine/core";
+import { Box, Table, Divider, Text, Card, Grid, Alert, Group, Tooltip, ScrollArea, rem, Modal, ActionIcon } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 
 /** For additional informations explains */
@@ -66,6 +66,11 @@ type ImportXlsxCheckCompProps<T extends z.ZodObject<z.ZodRawShape>,> = {
      * @default 10 * 1024 ** 2
     */
     maxFileSize?: number
+
+    /** Display download generated header xlsx template button?
+     * @default true
+    */
+    showDownloadTemplate?: boolean
 }
 
 export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
@@ -73,6 +78,7 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
     successCb,
     onReject,
     maxFileSize = 10 * 1024 ** 2,
+    showDownloadTemplate = true,
     info = [],
     ...props
 }: ImportXlsxCheckCompProps<T> & Partial<DropzoneProps>) => {
@@ -245,9 +251,31 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
 
                 <Grid>
                     <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                        <Text fw={500} fz={18}>
-                            Upload xlsx / csv file
-                        </Text>
+
+                        <Group justify="space-between">
+                            <Text fw={500} fz={18}>
+                                Upload XLSX / CSV file
+                            </Text>
+
+                            {showDownloadTemplate && (
+                                <Tooltip label="Download Template">
+                                    <ActionIcon
+                                        variant="light"
+                                        aria-label="Download Template"
+                                        onClick={() => {
+                                            const objKeys = [...zodScheme.keyof().options].reduce((acc, v) => ({...acc, [v]: ""}), {});
+
+                                            excelExportSingleFile(
+                                                [objKeys],
+                                                "Template",
+                                                "xlsx"
+                                            )
+                                        }}>
+                                        <IconDownload style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                                    </ActionIcon>
+                                </Tooltip>
+                            )}
+                        </Group>
 
                         <Alert variant="light" color="blue" title="" icon={<IconInfoCircle />} mt={12}>
                             Make sure your file includes all the required columns.
@@ -495,4 +523,54 @@ export async function readXlsxFileToJsonScheme(inputFile: File) {
         console.log(error);
         return []
     }
+}
+
+/** Helper to make xlsx sheet */
+function excelFileMaking(
+    data: any[],
+    type: "xlsx" | "csv" = "xlsx",
+    failCells?: string[]
+): Blob {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(data);
+
+    if (!!failCells && failCells?.length > 0) {
+        for (let cell of failCells) {
+            worksheet[cell].s = { fill: { fgColor: { rgb: "FF0000" } } }
+        }
+    }
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: type, type: 'array' });
+    return new Blob([excelBuffer], { type: 'application/octet-stream' });
+}
+
+/** Trigger the download by accepting str of `URL.createObjectURL(blob)` */
+function toDownloadFile(
+    fileStr: string,
+    fileName: string,
+    ext: string
+) {
+
+    if (typeof window !== "undefined") {
+        const link = document.createElement("a");
+        link.href = fileStr;
+
+        // File name
+        link.download = `${fileName}${ext}`;
+        link.click();
+    }
+
+}
+
+
+/** Create and download xlsx sheet without zip */
+export function excelExportSingleFile(
+    data: any[],
+    fileName: string, ext: "xlsx" | "csv" = "xlsx",
+    failCells?: string[]
+): void {
+    const blob = excelFileMaking(data, ext, failCells)
+    toDownloadFile(URL.createObjectURL(blob), fileName, "." + ext)
 }

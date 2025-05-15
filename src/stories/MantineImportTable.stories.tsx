@@ -1,7 +1,7 @@
 import React from 'react';
 
 import '@mantine/core/styles.css';
-import '@mantine/dropzone/styles.css';
+// import '@mantine/dropzone/styles.css';
 import { MantineProvider } from '@mantine/core';
 
 import type { Meta, StoryObj } from '@storybook/react';
@@ -30,6 +30,7 @@ type Story = StoryObj<typeof meta>;
 
 export const FirstStory: Story = {
     args: {
+        showDownloadTemplate: true,
         zodScheme: z.object({
             "University Number": z.string().min(1),
             "Curriculum Code": z.number(),

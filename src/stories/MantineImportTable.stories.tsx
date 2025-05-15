@@ -1,6 +1,8 @@
 import React from 'react';
 
 import '@mantine/core/styles.css';
+import '@mantine/dropzone/styles.css';
+
 import { MantineProvider } from '@mantine/core';
 
 import type { Meta, StoryObj } from '@storybook/react';

@@ -1,6 +1,6 @@
 {
   "name": "mantine-import-table",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Mantine Import Table",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

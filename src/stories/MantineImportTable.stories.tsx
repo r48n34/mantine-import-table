@@ -1,7 +1,6 @@
 import React from 'react';
 
 import '@mantine/core/styles.css';
-// import '@mantine/dropzone/styles.css';
 import { MantineProvider } from '@mantine/core';
 
 import type { Meta, StoryObj } from '@storybook/react';
@@ -22,13 +21,28 @@ const meta = {
                 < Story />
             </MantineProvider>
         ),
-    ]
+    ],
+    argTypes: {
+        zodScheme: {
+            disable: true
+        },
+        successCb: {
+            disable: true
+        },
+        info: {
+            disable: true
+        },
+        onReject: {
+            disable: true
+        },
+    },
 } satisfies Meta<typeof MantineImportTable>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const FirstStory: Story = {
+export const Main: Story = {
+
     args: {
         showDownloadTemplate: true,
         zodScheme: z.object({

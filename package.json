@@ -13,16 +13,20 @@
   "scripts": {
     "build": "rimraf dist && rollup -c",
     "test": "vitest",
+    "dev": "storybook dev -p 6006",
     "s": "storybook dev -p 6006",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "serve-storybook": "storybook build"
+    "serve-storybook": "storybook build",
+    "publish-p": " npm version patch && npm publish",
+    "publish-m": " npm version minor && npm publish"
   },
   "files": [
     "/dist"
   ],
   "keywords": [
     "react",
+    "mantine",
     "tsx",
     "csv",
     "xlsx"
@@ -75,5 +79,10 @@
     "prop-types": "^15.8.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^3.24.3"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "@mantine/core": "^7.0.0",
+    "@mantine/hooks": "^7.0.0"
   }
 }

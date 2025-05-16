@@ -86,8 +86,8 @@
     "@mantine/dropzone": ">7.0.0"
   },
   "peerDependenciesMeta": {
-    "soy-milk": {
-      "@mantine/dropzone": true
+    "@mantine/dropzone": {
+      "optional": true
     }
   }
 }

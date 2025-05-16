@@ -76,13 +76,18 @@
     "@mantine/dropzone": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
     "@tabler/icons-react": "^3.31.0",
-    "prop-types": "^15.8.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^3.24.3"
   },
   "peerDependencies": {
-    "react": "^16.0.0",
-    "@mantine/core": "^7.0.0",
-    "@mantine/hooks": "^7.0.0"
+    "react": ">16.0.0",
+    "@mantine/core": ">7.0.0",
+    "@mantine/hooks": ">7.0.0",
+    "@mantine/dropzone": ">7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "soy-milk": {
+      "@mantine/dropzone": true
+    }
   }
 }

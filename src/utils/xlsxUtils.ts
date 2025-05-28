@@ -32,27 +32,28 @@ export async function readXlsxFileToJsonScheme(inputFile: File) {
 
         // Convert the sheet data to JSON
         const jsonData: any[] = XLSX.utils.sheet_to_json(sheet, {
-            header: 1,
+            header: 0,
             blankrows: false,
             defval: null,
             raw: true
-            // raw: false
         });
+
+        // console.log("jsonData", jsonData);
 
         // Map the array to an array of objects
-        const resultArray = jsonData.map((row: any) => {
-            const obj = {} as any;
-            for (let i = 0; i < jsonData[0].length; i++) {
-                obj[jsonData[0][i]] = row[i];
-            }
-            return obj;
-        });
+        // const resultArray = jsonData.map((row: any) => {
+        //     const obj = {} as any;
+        //     for (let i = 0; i < jsonData[0].length; i++) {
+        //         obj[jsonData[0][i]] = row[i];
+        //     }
+        //     return obj;
+        // });
 
-        const noHeaderLs = resultArray.slice(1);
+        // const noHeaderLs = resultArray.slice(1);
 
-        console.log("noHeaderLs", noHeaderLs);
+        // console.log("noHeaderLs", noHeaderLs);
 
-        return noHeaderLs;
+        return jsonData;
     } catch (error) {
         console.log(error);
         return []

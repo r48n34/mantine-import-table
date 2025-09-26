@@ -143,7 +143,7 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                 onClose={closeModal}
                 title="Invalid Input"
             >
-                <Box>
+                {opened && (<Box>
                     <Text size="sm" c="dimmed">
                         Please check the following items in your XLSX / CSV file.
                     </Text>
@@ -224,18 +224,18 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                                                 </Table.Tr>
                                             </Table.Thead>
                                             <Table.Tbody>
-                                                {warningRows.map(rowNum => ({ row: rowNum , ...warningData.find( v => v["__rowNum__"] === rowNum) })).map((val, i) => (
+                                                {warningRows.map(rowNum => ({ row: rowNum, ...warningData.find(v => v["__rowNum__"] === rowNum) })).map((val, i) => (
                                                     <Table.Tr key={i}>
                                                         {Object.keys(val).map(key => (
                                                             <Tooltip label={
-                                                                warningLines.find(w => w.key === key && val.row === w.row )
-                                                                    ? warningLines.find(w => w.key === key && val.row === w.row )!.msg
+                                                                warningLines.find(w => w.key === key && val.row === w.row)
+                                                                    ? warningLines.find(w => w.key === key && val.row === w.row)!.msg
                                                                     : val[key as keyof typeof val] + ""
                                                             }>
                                                                 <Table.Th
                                                                     key={key}
                                                                     bg={
-                                                                        warningLines.find(w => w.key === key && val.row === w.row )
+                                                                        warningLines.find(w => w.key === key && val.row === w.row)
                                                                             ? "#ff6363"
                                                                             : ''
                                                                     }
@@ -264,6 +264,7 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                         </Button>
                     </Group>
                 </Box>
+            )}
             </Modal>
 
             <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -391,7 +392,7 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                             loading={isLoading}
                             onDrop={async (files) => {
 
-                                let data: any[] = [];
+                                let data: object[] = [];
 
                                 try {
                                     setIsLoading(true);
@@ -421,7 +422,7 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                                         console.log(error.issues);
 
                                         const setWarnLines = error.issues.map(v => ({
-                                            row: data[+v.path[0]]["__rowNum__"],
+                                            row: (data as any[])[+v.path[0]]["__rowNum__"],
                                             key: v.path[1] + "",
                                             code: v.code + "",
                                             msg: v.message
@@ -431,7 +432,9 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                                             setWarnLines
                                         )
 
-                                        setWarningRows(Array.from(new Set(setWarnLines.map( v => v.row ))))
+                                        setWarningRows(Array.from(
+                                            new Set(setWarnLines.map(v => v.row))
+                                        ))
                                         setWarningData(data)
                                         open();
                                     }
@@ -491,5 +494,3 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
         </>
     )
 }
-
-

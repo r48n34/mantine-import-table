@@ -54,7 +54,6 @@ export const Main: Story = {
             "Fish Enum": z.enum(["Salmon", "Tuna", "Trout"]),
             "Date": z.date(),
             "idk": z.string().optional()
-        }),
-        successCb: (v) => console.log(v)
+        })
     },
 };

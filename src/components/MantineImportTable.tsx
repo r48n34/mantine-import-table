@@ -56,20 +56,23 @@ export type MantineImportTableProps<T extends z.ZodObject<z.ZodRawShape>,> = {
     info?: InfoColumnsInput[]
 
     /** Will return your z.object() Array after a success input */
-    successCb: (data: z.output<T>[]) => void;
+    successCb?: (data: z.output<T>[]) => void;
 
     /** Return Reject input files */
     onReject?: (fileRejections: FileRejection[]) => void
 
-    /**  Max xlsx / csv file size in bytes 
+    /**  Max xlsx / csv file size in bytes (Default 10 * 1024 ** 2)
      * @default 10 * 1024 ** 2
     */
     maxFileSize?: number
 
-    /** Display download generated header xlsx template button?
+    /** Display download generated header xlsx template button? (Default true)
      * @default true
     */
     showDownloadTemplate?: boolean
+
+    /** Modify the display text fot the notes (Put null / undefinded to hide) */
+    alertText?: string | null | undefined
 }
 
 export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
@@ -79,6 +82,7 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
     maxFileSize = 10 * 1024 ** 2,
     showDownloadTemplate = true,
     info = [],
+    alertText = "Make sure your file includes all the required columns.",
     ...props
 }: MantineImportTableProps<T> & Partial<DropzoneProps>) => {
 
@@ -288,12 +292,15 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                             )}
                         </Group>
 
-                        <Alert variant="light" color="blue" title="" icon={<IconInfoCircle />} mt={12}>
-                            Make sure your file includes all the required columns.
-                        </Alert>
+                        {alertText && (
+                            <Alert variant="light" color="blue" title="" icon={<IconInfoCircle />} mt={16}>
+                                {alertText}
+                            </Alert>
+                        )}
+
 
                         <Text fw={500} fz={18} mt={12}>
-                            Required columns
+                            Required column
                         </Text>
                         <Text c="dimmed" fz={12}>
                             Make sure these header are in your file
@@ -401,7 +408,7 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                                     const zodSchemeLs = z.array(zodScheme);
                                     const parseData: z.infer<typeof zodScheme>[] = zodSchemeLs.parse(data);
 
-                                    successCb(parseData);
+                                    !!successCb && successCb(parseData);
                                 }
                                 catch (error: any) {
                                     if (error instanceof z.ZodError) {

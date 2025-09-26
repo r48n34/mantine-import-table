@@ -1,6 +1,11 @@
 import XLSX from "xlsx";
 
-// Helper func
+
+/**
+ * Helper function to create file to buffers
+ * 
+ * @param {File} inputFile - Reading "Web APIs File" type
+ */
 export async function readFileToBuffer(inputFile: File): Promise<Uint8Array> {
     return new Promise((rec) => {
         let reader = new FileReader();
@@ -15,7 +20,9 @@ export async function readFileToBuffer(inputFile: File): Promise<Uint8Array> {
 }
 
 // https://docs.sheetjs.com/docs/api/utilities/array#array-output
-export async function readXlsxFileToJsonScheme(inputFile: File) {
+
+/** Reading "Web APIs File" type to object array */
+export async function readXlsxFileToJsonScheme(inputFile: File): Promise<object[]> {
     try {
         const arrayBuffer = await readFileToBuffer(inputFile);
 
@@ -38,21 +45,6 @@ export async function readXlsxFileToJsonScheme(inputFile: File) {
             raw: true
         });
 
-        // console.log("jsonData", jsonData);
-
-        // Map the array to an array of objects
-        // const resultArray = jsonData.map((row: any) => {
-        //     const obj = {} as any;
-        //     for (let i = 0; i < jsonData[0].length; i++) {
-        //         obj[jsonData[0][i]] = row[i];
-        //     }
-        //     return obj;
-        // });
-
-        // const noHeaderLs = resultArray.slice(1);
-
-        // console.log("noHeaderLs", noHeaderLs);
-
         return jsonData;
     } catch (error) {
         console.log(error);
@@ -62,7 +54,7 @@ export async function readXlsxFileToJsonScheme(inputFile: File) {
 
 /** Helper to make xlsx sheet */
 function excelFileMaking(
-    data: any[],
+    data: object[],
     type: "xlsx" | "csv" = "xlsx",
     failCells?: string[]
 ): Blob {
@@ -101,7 +93,7 @@ function toDownloadFile(
 
 /** Create and download xlsx sheet without zip */
 export function excelExportSingleFile(
-    data: any[],
+    data: object[],
     fileName: string, ext: "xlsx" | "csv" = "xlsx",
     failCells?: string[]
 ): void {

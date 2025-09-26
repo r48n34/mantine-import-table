@@ -5045,7 +5045,6 @@ __metadata:
     happy-dom: "npm:^14.7.1"
     hash-css-selector: "npm:^1.1.0"
     jsdom: "npm:^24.0.0"
-    prop-types: "npm:^15.8.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-test-renderer: "npm:^18.2.0"
@@ -5063,6 +5062,14 @@ __metadata:
     vitest: "npm:^1.5.0"
     xlsx: "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
     zod: "npm:^3.24.3"
+  peerDependencies:
+    "@mantine/core": ">7.0.0"
+    "@mantine/dropzone": ">7.0.0"
+    "@mantine/hooks": ">7.0.0"
+    react: ">16.0.0"
+  peerDependenciesMeta:
+    "@mantine/dropzone":
+      optional: true
   languageName: unknown
   linkType: soft
 

@@ -68,7 +68,7 @@ export default function MainPage() {
 | Name                 | Require |  Type                          | Description                                               | 
 | -------------------- | ------- | ------------------------------ | --------------------------------------------------------- | 
 | zodScheme            | Yes     | z.object({})                   | Your z.object() scheme                                    | 
-| successCb            | Yes     | (data: z.output<T>[]) => void  | return your z.object().parse Array after a success input  |
+| successCb            | No      | (data: z.output<T>[]) => void  | return your z.object().parse Array after a success input  |
 
 Samples:
 ```tsx
@@ -105,6 +105,7 @@ export default function MainPage() {
 | onReject             | No      | (fileRejections: FileRejection[]) => void   | N/A             | Return Reject input files                               |   
 | maxFileSize          | No      | number                                      | 10 * 1024 ** 2 | Max xlsx / csv file size in bytes                        |   
 | showDownloadTemplate | No      | boolean                                     | true           | Display download generated header xlsx template button   |   
+| alertText            | No      | string | null | undefined                   | Make sure your file includes all the required columns.           | The alert text (Set null / undefinded to hide)   |   
 
 
 #### Params for `info`: `InfoColumnsInput`

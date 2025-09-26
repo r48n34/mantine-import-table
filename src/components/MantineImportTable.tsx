@@ -9,7 +9,7 @@ import { Box, Table, Divider, Text, Card, Grid, Alert, Group, Tooltip, ScrollAre
 import { useDisclosure } from '@mantine/hooks';
 import { excelExportSingleFile, readXlsxFileToJsonScheme } from "../utils/xlsxUtils";
 
-/** For additional informations explains */
+/** For additional informations explains (User input) */
 export interface InfoColumnsInput {
     /** Must be match with your Zod Scheme Key (e.g. User ID ) */
     key: string
@@ -31,6 +31,7 @@ export interface InfoColumnsInput {
     examples?: string
 }
 
+/** For additional informations by internal uses */
 interface InfoColumns extends InfoColumnsInput {
     /** 
      * Is this header / col is a optional header? (e.g. true ) 
@@ -104,6 +105,9 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
         return [...zodScheme.keyof().options].map((key: string) => {
             const foundInfo = info.find(info => info.key === key);
             const schemaForKey = zodScheme.shape[key];
+
+            // console.log(schemaForKey._def);
+            // console.log((schemaForKey._def.typeName as string).replace("Zod", ""));
 
             if (foundInfo === undefined) {
                 return {
@@ -298,9 +302,8 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                             </Alert>
                         )}
 
-
                         <Text fw={500} fz={18} mt={12}>
-                            Required column
+                            Required Columns
                         </Text>
                         <Text c="dimmed" fz={12}>
                             Make sure these header are in your file
@@ -340,10 +343,13 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                         {explainCols.filter(v => v.optional).length >= 1 && (
                             <Box>
                                 <Text fw={500} fz={18} mt={36}>
-                                    Optional columns
+                                    Optional Columns
                                 </Text>
                                 <Text c="dimmed" fz={12}>
-                                    These Header are optional
+                                    These header are optional
+                                </Text>
+                                <Text c="dimmed" fz={12}>
+                                    If you input the optional header, please follow the regarding rules
                                 </Text>
 
                                 <Divider my="sm" />
@@ -378,7 +384,6 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                                 ))}
                             </Box>
                         )}
-
                     </Grid.Col>
 
                     <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
@@ -474,7 +479,7 @@ export const MantineImportTable = <T extends z.ZodObject<z.ZodRawShape>,>({
                                         Drag file here or click to select file
                                     </Text>
                                     <Text size="sm" c="dimmed" inline mt={7}>
-                                        Accept xlsx / csv file (Max {(maxFileSize / 1024 / 1024).toFixed(1)} MB)
+                                        Accept xlsx / csv file only (Max {(maxFileSize / 1024 / 1024).toFixed(1)} MB)
                                     </Text>
                                 </div>
                             </Group>

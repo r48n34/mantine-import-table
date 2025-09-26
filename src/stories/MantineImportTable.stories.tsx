@@ -54,6 +54,10 @@ export const Main: Story = {
             "Fish Enum": z.enum(["Salmon", "Tuna", "Trout"]),
             "Date": z.date(),
             "idk": z.string().optional()
-        })
+        }),
+        alertText: "Make sure your file includes all the required columns.",
+        successCb: (d) => {
+            alert(d)
+        }
     },
 };
